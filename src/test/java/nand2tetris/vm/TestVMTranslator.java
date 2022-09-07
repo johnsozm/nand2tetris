@@ -25,9 +25,9 @@ public class TestVMTranslator {
     }
 
     @Test
-    public void testStackTest() {
+    public void testStackTest() throws IOException {
         VMTranslator.main(new String[]{"src/test/java/nand2tetris/vm/StackTest.vm"});
-        //TODO: Add assertion once I have comparison files
+        assertTrue("Assembly code does not match", FileUtils.contentEquals(new File("src/test/java/nand2tetris/vm/StackTest.asm"), new File("src/test/java/nand2tetris/vm/StackTest.asm.cmp")));
     }
 
     @Test
