@@ -263,28 +263,28 @@ public class CodeWriter {
         writer.write("M=D\n");
         //Push LCL
         writer.write("@LCL\n");
-        writer.write("D=A\n");
+        writer.write("D=M\n");
         writer.write("@SP\n");
         writer.write("M=M+1\n");
         writer.write("A=M-1\n");
         writer.write("M=D\n");
         //Push ARG
         writer.write("@ARG\n");
-        writer.write("D=A\n");
+        writer.write("D=M\n");
         writer.write("@SP\n");
         writer.write("M=M+1\n");
         writer.write("A=M-1\n");
         writer.write("M=D\n");
         //Push THIS
         writer.write("@THIS\n");
-        writer.write("D=A\n");
+        writer.write("D=M\n");
         writer.write("@SP\n");
         writer.write("M=M+1\n");
         writer.write("A=M-1\n");
         writer.write("M=D\n");
         //Push THAT
         writer.write("@THAT\n");
-        writer.write("D=A\n");
+        writer.write("D=M\n");
         writer.write("@SP\n");
         writer.write("M=M+1\n");
         writer.write("A=M-1\n");
@@ -293,7 +293,7 @@ public class CodeWriter {
         writer.write("@" + (_numArgs + 5) + "\n");
         writer.write("D=A\n");
         writer.write("@SP\n");
-        writer.write("D=A-D\n");
+        writer.write("D=M-D\n");
         writer.write("@ARG\n");
         writer.write("M=D\n");
         //LCL=SP
