@@ -45,3 +45,6 @@ bin/
 /gradlew.bat
 /nand2tetris.iml
 /settings.gradle.kts
+
+### Nand2Tetris Specific Files ###
+*.hack
