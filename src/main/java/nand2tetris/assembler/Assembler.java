@@ -11,7 +11,7 @@ import java.io.IOException;
 public class Assembler {
     public static void main(String[] args) {
         if (args.length != 1) {
-            System.out.println("Usage: Assembler.jar [filename]");
+            System.err.println("Usage: Assembler.jar [filename]");
             System.exit(1);
         }
 
@@ -19,7 +19,7 @@ public class Assembler {
         String assemblyFilename = args[0];
         File assemblyFile = new File(assemblyFilename);
         if (!assemblyFile.exists()) {
-            System.out.println("Error: No such file " + assemblyFilename);
+            System.err.println("Error: No such file " + assemblyFilename);
             System.exit(1);
         }
 
@@ -27,7 +27,7 @@ public class Assembler {
         String hackFilename;
         File hackFile = null;
         if (!assemblyFilename.endsWith(".asm")) {
-            System.out.println("Error: Assembler files should use the .asm extension.");
+            System.err.println("Error: Assembler files should use the .asm extension.");
             System.exit(1);
         }
         else {
@@ -105,8 +105,8 @@ public class Assembler {
             catch (FileNotFoundException ignored) {} //Check for file existence is above
         }
         catch (IOException e) {
-            System.out.println("IOException while trying to write .hack file.");
-            System.out.println(e.getMessage());
+            System.err.println("IOException while trying to write .hack file.");
+            System.err.println(e.getMessage());
         }
     }
 }
