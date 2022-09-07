@@ -7,31 +7,31 @@ import java.io.IOException;
 
 public class TestVMTranslator {
     @Test
-    void testBasicTest() {
+    public void testBasicTest() {
         VMTranslator.main(new String[]{"src/test/java/nand2tetris/vm/BasicTest.vm"});
         //TODO: Add assertion once I have comparison files
     }
 
     @Test
-    void testPointerTest() {
+    public void testPointerTest() {
         VMTranslator.main(new String[]{"src/test/java/nand2tetris/vm/PointerTest.vm"});
         //TODO: Add assertion once I have comparison files
     }
 
     @Test
-    void testSimpleAdd() {
+    public void testSimpleAdd() {
         VMTranslator.main(new String[]{"src/test/java/nand2tetris/vm/SimpleAdd.vm"});
         //TODO: Add assertion once I have comparison files
     }
 
     @Test
-    void testStackTest() {
+    public void testStackTest() {
         VMTranslator.main(new String[]{"src/test/java/nand2tetris/vm/StackTest.vm"});
         //TODO: Add assertion once I have comparison files
     }
 
     @Test
-    void testStaticTest() {
+    public void testStaticTest() {
         VMTranslator.main(new String[]{"src/test/java/nand2tetris/vm/StaticTest.vm"});
         //TODO: Add assertion once I have comparison files
     }
