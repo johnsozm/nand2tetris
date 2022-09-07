@@ -9,7 +9,7 @@ import java.io.IOException;
  */
 public class CodeWriter {
     /**Output file writer*/
-    private FileWriter writer;
+    private final FileWriter writer;
     /**Current VM filename*/
     private String filename;
     /**Numeric label for conditional branching*/
@@ -379,6 +379,7 @@ public class CodeWriter {
      * @param _numLocals The number of local variables the function uses.
      */
     public void writeFunction(String _functionName, int _numLocals) throws IOException {
+        currentFunction = _functionName;
         writer.write("(" + _functionName + ")\n");
         if (_numLocals != 0) {
             writer.write("@" + _numLocals + "\n");
