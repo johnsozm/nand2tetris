@@ -136,6 +136,7 @@ public class Parser {
                 break;
             default:
                 commandType = CommandType.C_ARITHMETIC;
+                arg1 = tokens[0];
         }
     }
 
