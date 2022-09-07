@@ -47,4 +47,4 @@ bin/
 /settings.gradle.kts
 
 ### Nand2Tetris Specific Files ###
-*.hack
+/src/test/nand2tetris/assembler/*.hack
