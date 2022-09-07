@@ -79,6 +79,7 @@ public class CodeWriter {
                 writer.write("D;J" + _command.toUpperCase() + "\n");
                 writer.write("D=0\n");
                 writer.write("@endbranch" + branchNumber + "\n");
+                writer.write("0;JMP\n");
                 writer.write("(branch" + branchNumber + ")\n");
                 writer.write("D=-1\n");
                 writer.write("(endbranch" + branchNumber + ")\n");
