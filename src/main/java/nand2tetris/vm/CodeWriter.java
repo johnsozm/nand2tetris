@@ -122,30 +122,37 @@ public class CodeWriter {
                 writer.write("D=A\n");
                 writer.write("@LCL\n");
                 writer.write("D=D+M\n");
+                break;
             case "argument":
                 writer.write("@" + _index + "\n");
                 writer.write("D=A\n");
                 writer.write("@ARG\n");
                 writer.write("D=D+M\n");
+                break;
             case "this":
                 writer.write("@" + _index + "\n");
                 writer.write("D=A\n");
                 writer.write("@THIS\n");
                 writer.write("D=D+M\n");
+                break;
             case "that":
                 writer.write("@" + _index + "\n");
                 writer.write("D=A\n");
                 writer.write("@THAT\n");
                 writer.write("D=D+M\n");
+                break;
             case "pointer":
                 writer.write("@" + (_index + 3) + "\n");
                 writer.write("D=A\n");
+                break;
             case "temp":
                 writer.write("@" + (_index + 5) + "\n");
                 writer.write("D=A\n");
+                break;
             case "static":
                 writer.write("@" + filename + "." + _index + "\n");
                 writer.write("D=A\n");
+                break;
         }
 
         //Write push/pop logic
