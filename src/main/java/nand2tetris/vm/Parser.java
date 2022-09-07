@@ -58,7 +58,8 @@ public class Parser {
             String line = scanner.nextLine();
 
             //Remove whitespace
-            line = line.replaceAll("[ \t]+", "");
+            line = line.replaceAll("^[ \t]+", "");
+            line = line.replaceAll("[ \t]+$", "");
 
             //Remove comments if present
             int trimIndex = line.indexOf("//");
@@ -137,6 +138,7 @@ public class Parser {
             default:
                 commandType = CommandType.C_ARITHMETIC;
                 arg1 = tokens[0];
+                break;
         }
     }
 
