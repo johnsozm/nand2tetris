@@ -14,6 +14,10 @@ public class CodeWriter {
     private String filename;
     /**Numeric label for conditional branching*/
     private int branchNumber;
+    /**Current function name (used as label prefix)*/
+    private String currentFunction;
+    /**Numeric label for return addresses*/
+    private int returnNumber;
 
     /**
      * Constructs a new code writer instance.
@@ -22,6 +26,8 @@ public class CodeWriter {
     public CodeWriter(File _output) throws IOException {
         writer = new FileWriter(_output);
         branchNumber = 1;
+        currentFunction = "Sys.init";
+        returnNumber = 1;
     }
 
     /**
@@ -194,8 +200,15 @@ public class CodeWriter {
     /**
      * Writes initialization code.
      */
-    public void writeInit() {
-
+    public void writeInit() throws IOException {
+        //Write SP=256
+        writer.write("@256\n");
+        writer.write("D=A\n");
+        writer.write("@SP\n");
+        writer.write("M=D\n");
+        //Write jump to init method (no stack frame needed for initial call)
+        writer.write("@Sys.init\n");
+        writer.write("0;JMP\n");
     }
 
     /**
@@ -203,8 +216,8 @@ public class CodeWriter {
      *
      * @param _label The label name to use.
      */
-    public void writeLabel(String _label) {
-
+    public void writeLabel(String _label) throws IOException {
+        writer.write("(" + currentFunction + "$" + _label + ")\n");
     }
 
     /**
@@ -212,8 +225,10 @@ public class CodeWriter {
      *
      * @param _label The label to be jumped to.
      */
-    public void writeGoto(String _label) {
-
+    public void writeGoto(String _label) throws IOException {
+        //Unconditional jump to the target label
+        writer.write("@" + currentFunction + "$" + _label + "\n");
+        writer.write("0;JMP\n");
     }
 
     /**
@@ -221,8 +236,15 @@ public class CodeWriter {
      *
      * @param _label The label to be jumped to.
      */
-    public void writeIf(String _label) {
-
+    public void writeIf(String _label) throws IOException {
+        //Decrement stack pointer and store popped value in D register
+        writer.write("@SP\n");
+        writer.write("M=M-1\n");
+        writer.write("A=M\n");
+        writer.write("D=M\n");
+        //Conditional jump to target label
+        writer.write("@" + currentFunction + "$" + _label + "\n");
+        writer.write("D;JNE\n");
     }
 
     /**
@@ -231,15 +253,123 @@ public class CodeWriter {
      * @param _functionName The name of the function to be called.
      * @param _numArgs The number of arguments passed to the function.
      */
-    public void writeCall(String _functionName, int _numArgs) {
-
+    public void writeCall(String _functionName, int _numArgs) throws IOException {
+        //Push return address
+        writer.write("@return" + returnNumber + "\n");
+        writer.write("D=A\n");
+        writer.write("@SP\n");
+        writer.write("M=M+1\n");
+        writer.write("A=M-1\n");
+        writer.write("M=D\n");
+        //Push LCL
+        writer.write("@LCL\n");
+        writer.write("D=A\n");
+        writer.write("@SP\n");
+        writer.write("M=M+1\n");
+        writer.write("A=M-1\n");
+        writer.write("M=D\n");
+        //Push ARG
+        writer.write("@ARG\n");
+        writer.write("D=A\n");
+        writer.write("@SP\n");
+        writer.write("M=M+1\n");
+        writer.write("A=M-1\n");
+        writer.write("M=D\n");
+        //Push THIS
+        writer.write("@THIS\n");
+        writer.write("D=A\n");
+        writer.write("@SP\n");
+        writer.write("M=M+1\n");
+        writer.write("A=M-1\n");
+        writer.write("M=D\n");
+        //Push THAT
+        writer.write("@THAT\n");
+        writer.write("D=A\n");
+        writer.write("@SP\n");
+        writer.write("M=M+1\n");
+        writer.write("A=M-1\n");
+        writer.write("M=D\n");
+        //Set ARG to base of argument stack
+        writer.write("@" + (_numArgs + 5) + "\n");
+        writer.write("D=A\n");
+        writer.write("@SP\n");
+        writer.write("D=A-D\n");
+        writer.write("@ARG\n");
+        writer.write("M=D\n");
+        //LCL=SP
+        writer.write("@SP\n");
+        writer.write("D=M\n");
+        writer.write("@LCL\n");
+        writer.write("M=D\n");
+        //Jump to function
+        writer.write("@" + _functionName + "\n");
+        writer.write("0;JMP\n");
+        //Return address to jump back to when done
+        writer.write("(return" + returnNumber + ")\n");
+        returnNumber++;
     }
 
     /**
      * Writes assembly code corresponding to a return statement.
      */
-    public void writeReturn() {
-
+    public void writeReturn() throws IOException {
+        //Store LCL at M[14] for reference
+        writer.write("@LCL\n");
+        writer.write("D=M\n");
+        writer.write("@14\n");
+        writer.write("M=D\n");
+        //Store return address at M[15] for later use
+        writer.write("@5\n");
+        writer.write("A=D-A\n");
+        writer.write("D=M\n");
+        writer.write("@15\n");
+        writer.write("M=D\n");
+        //Store return value at ARG
+        writer.write("@SP\n");
+        writer.write("A=M-1\n");
+        writer.write("D=M\n");
+        writer.write("@ARG\n");
+        writer.write("A=M\n");
+        writer.write("M=D\n");
+        //Reposition stack pointer to ARG + 1
+        writer.write("@ARG\n");
+        writer.write("D=M+1\n");
+        writer.write("@SP\n");
+        writer.write("M=D\n");
+        //Restore previous value of THAT
+        writer.write("@14\n");
+        writer.write("A=M-1\n");
+        writer.write("D=M\n");
+        writer.write("@THAT\n");
+        writer.write("M=D\n");
+        //Restore previous value of THIS
+        writer.write("@14\n");
+        writer.write("D=M\n");
+        writer.write("@2\n");
+        writer.write("A=D-A\n");
+        writer.write("D=M\n");
+        writer.write("@THIS\n");
+        writer.write("M=D\n");
+        //Restore previous value of ARG
+        writer.write("@14\n");
+        writer.write("D=M\n");
+        writer.write("@3\n");
+        writer.write("A=D-A\n");
+        writer.write("D=M\n");
+        writer.write("@ARG\n");
+        writer.write("M=D\n");
+        //Restore previous value of LCL
+        writer.write("@14\n");
+        writer.write("D=M\n");
+        writer.write("@4\n");
+        writer.write("A=D-A\n");
+        writer.write("D=M\n");
+        writer.write("@LCL\n");
+        writer.write("M=D\n");
+        //Fetch return address and jump to it
+        writer.write("@15\n");
+        writer.write("A=M\n");
+        writer.write("0; JMP\n");
     }
 
     /**
@@ -248,8 +378,21 @@ public class CodeWriter {
      * @param _functionName The name of the function to declare.
      * @param _numLocals The number of local variables the function uses.
      */
-    public void writeFunction(String _functionName, int _numLocals) {
-
+    public void writeFunction(String _functionName, int _numLocals) throws IOException {
+        writer.write("(" + _functionName + ")\n");
+        if (_numLocals != 0) {
+            writer.write("@" + _numLocals + "\n");
+            writer.write("D=A\n");
+            writer.write("@SP\n");
+            writer.write("M=M+D\n");
+            writer.write("A=M-1\n");
+            for (int i = 0; i < _numLocals; i++) {
+                writer.write("M=0\n");
+                if (i != _numLocals - 1) {
+                    writer.write("A=A-1\n");
+                }
+            }
+        }
     }
 
     /**
