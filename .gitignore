@@ -40,3 +40,8 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+/build.gradle.kts
+/gradlew
+/gradlew.bat
+/nand2tetris.iml
+/settings.gradle.kts
