@@ -10,10 +10,20 @@ public class SymbolTable {
     private HashMap<String, Integer> map;
 
     /**
-     * Creates a new empty symbol table.
+     * Creates a new symbol table populated with default symbols.
      */
     public SymbolTable() {
         map = new HashMap<>();
+        map.put("SP", 0);
+        map.put("LCL", 1);
+        map.put("ARG", 2);
+        map.put("THIS", 3);
+        map.put("THAT", 4);
+        map.put("SCREEN", 16384);
+        map.put("KBD", 24576);
+        for (int i = 0; i < 16; i++) {
+            map.put("R" + i, i);
+        }
     }
 
     /**
