@@ -12,7 +12,7 @@ public class Assembler {
     public static void main(String[] args) {
         if (args.length != 1) {
             System.out.println("Usage: Assembler.jar [filename]");
-            return;
+            System.exit(1);
         }
 
         //Throw error if input file does not exist
@@ -20,15 +20,15 @@ public class Assembler {
         File assemblyFile = new File(assemblyFilename);
         if (!assemblyFile.exists()) {
             System.out.println("Error: No such file " + assemblyFilename);
-            return;
+            System.exit(1);
         }
 
         //Generate output filename based on input filename
         String hackFilename;
-        File hackFile;
+        File hackFile = null;
         if (!assemblyFilename.endsWith(".asm")) {
             System.out.println("Error: Assembler files should use the .asm extension.");
-            return;
+            System.exit(1);
         }
         else {
             hackFilename = assemblyFilename.substring(0, assemblyFilename.length() - 3) + "hack";
