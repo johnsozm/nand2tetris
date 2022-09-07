@@ -62,6 +62,7 @@ public class Parser {
                 lines.add(line);
             }
         }
+        scanner.close();
     }
 
     /**
