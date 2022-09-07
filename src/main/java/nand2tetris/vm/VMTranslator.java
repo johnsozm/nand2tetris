@@ -51,7 +51,6 @@ public class VMTranslator {
 
                 while (parser.hasMoreCommands()) {
                     parser.advance();
-                    System.out.println(parser.commandType());
                     switch (parser.commandType()) {
                         case C_ARITHMETIC:
                             writer.writeArithmetic(parser.arg1());
