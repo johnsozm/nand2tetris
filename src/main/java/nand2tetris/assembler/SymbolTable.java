@@ -13,7 +13,7 @@ public class SymbolTable {
      * Creates a new empty symbol table.
      */
     public SymbolTable() {
-        map = new HashMap<String, Integer>();
+        map = new HashMap<>();
     }
 
     /**
