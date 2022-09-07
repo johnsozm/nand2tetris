@@ -7,21 +7,21 @@ import java.io.IOException;
 
 public class TestVMTranslator {
     @Test
-    public void testBasicTest() {
+    public void testBasicTest() throws IOException {
         VMTranslator.main(new String[]{"src/test/java/nand2tetris/vm/BasicTest.vm"});
-        //TODO: Add assertion once I have comparison files
+        assertTrue("Assembly code does not match", FileUtils.contentEquals(new File("src/test/java/nand2tetris/vm/BasicTest.asm"), new File("src/test/java/nand2tetris/vm/BasicTest.asm.cmp")));
     }
 
     @Test
-    public void testPointerTest() {
+    public void testPointerTest() throws IOException {
         VMTranslator.main(new String[]{"src/test/java/nand2tetris/vm/PointerTest.vm"});
-        //TODO: Add assertion once I have comparison files
+        assertTrue("Assembly code does not match", FileUtils.contentEquals(new File("src/test/java/nand2tetris/vm/PointerTest.asm"), new File("src/test/java/nand2tetris/vm/PointerTest.asm.cmp")));
     }
 
     @Test
-    public void testSimpleAdd() {
+    public void testSimpleAdd() throws IOException {
         VMTranslator.main(new String[]{"src/test/java/nand2tetris/vm/SimpleAdd.vm"});
-        //TODO: Add assertion once I have comparison files
+        assertTrue("Assembly code does not match", FileUtils.contentEquals(new File("src/test/java/nand2tetris/vm/SimpleAdd.asm"), new File("src/test/java/nand2tetris/vm/SimpleAdd.asm.cmp")));
     }
 
     @Test
@@ -31,8 +31,8 @@ public class TestVMTranslator {
     }
 
     @Test
-    public void testStaticTest() {
+    public void testStaticTest() throws IOException {
         VMTranslator.main(new String[]{"src/test/java/nand2tetris/vm/StaticTest.vm"});
-        //TODO: Add assertion once I have comparison files
+        assertTrue("Assembly code does not match", FileUtils.contentEquals(new File("src/test/java/nand2tetris/vm/StaticTest.asm"), new File("src/test/java/nand2tetris/vm/StaticTest.asm.cmp")));
     }
 }
