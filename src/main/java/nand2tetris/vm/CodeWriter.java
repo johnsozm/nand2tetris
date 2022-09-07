@@ -26,6 +26,7 @@ public class CodeWriter {
 
     /**
      * Sets the VM filename - should be used when a new VM file is opened.
+     *
      * @param _filename The new VM filename to use.
      */
     public void setFileName(String _filename) {
@@ -34,6 +35,8 @@ public class CodeWriter {
 
     /**
      * Writes code corresponding to a stack arithmetic command.
+     *
+     * @param _command The arithmetic command to be written.
      */
     public void writeArithmetic(String _command) throws IOException {
         //Special handling for unary operators
@@ -93,6 +96,7 @@ public class CodeWriter {
 
     /**
      * Writes code corresponding to a push or pop command.
+     *
      * @param _type The command type to write (must be C_PUSH or C_POP)
      * @param _segment The segment to push from or pop to
      * @param _index The index to use within the given segment
@@ -185,6 +189,67 @@ public class CodeWriter {
             writer.write("@SP\n");
             writer.write("M=M-1\n");
         }
+    }
+
+    /**
+     * Writes initialization code.
+     */
+    public void writeInit() {
+
+    }
+
+    /**
+     * Writes assembly code corresponding to a label command.
+     *
+     * @param _label The label name to use.
+     */
+    public void writeLabel(String _label) {
+
+    }
+
+    /**
+     * Writes assembly code corresponding to a goto command.
+     *
+     * @param _label The label to be jumped to.
+     */
+    public void writeGoto(String _label) {
+
+    }
+
+    /**
+     * Writes assembly code corresponding to a conditional goto command.
+     *
+     * @param _label The label to be jumped to.
+     */
+    public void writeIf(String _label) {
+
+    }
+
+    /**
+     * Writes assembly code corresponding to a function call.
+     *
+     * @param _functionName The name of the function to be called.
+     * @param _numArgs The number of arguments passed to the function.
+     */
+    public void writeCall(String _functionName, int _numArgs) {
+
+    }
+
+    /**
+     * Writes assembly code corresponding to a return statement.
+     */
+    public void writeReturn() {
+
+    }
+
+    /**
+     * Writes assembly code corresponding to a function declaration.
+     *
+     * @param _functionName The name of the function to declare.
+     * @param _numLocals The number of local variables the function uses.
+     */
+    public void writeFunction(String _functionName, int _numLocals) {
+
     }
 
     /**
