@@ -107,6 +107,7 @@ public class Assembler {
         catch (IOException e) {
             System.err.println("IOException while trying to write .hack file.");
             System.err.println(e.getMessage());
+            System.exit(1);
         }
     }
 }
