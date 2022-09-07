@@ -85,6 +85,7 @@ public class CodeWriter {
                 writer.write("@SP\n");
                 writer.write("A=M-1\n");
                 writer.write("M=D\n");
+                branchNumber++;
                 break;
         }
     }
