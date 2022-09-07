@@ -45,6 +45,7 @@ public class VMTranslator {
 
         try {
             CodeWriter writer = new CodeWriter(output);
+            writer.writeInit();
             for (File f: toParse) {
                 writer.setFileName(f.getName());
                 Parser parser = new Parser(f);
@@ -58,6 +59,24 @@ public class VMTranslator {
                         case C_PUSH:
                         case C_POP:
                             writer.writePushPop(parser.commandType(), parser.arg1(), parser.arg2());
+                            break;
+                        case C_LABEL:
+                            writer.writeLabel(parser.arg1());
+                            break;
+                        case C_GOTO:
+                            writer.writeGoto(parser.arg1());
+                            break;
+                        case C_IF:
+                            writer.writeIf(parser.arg1());
+                            break;
+                        case C_FUNCTION:
+                            writer.writeFunction(parser.arg1(), parser.arg2());
+                            break;
+                        case C_RETURN:
+                            writer.writeReturn();
+                            break;
+                        case C_CALL:
+                            writer.writeCall(parser.arg1(), parser.arg2());
                             break;
                     }
                 }
