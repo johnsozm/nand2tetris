@@ -57,15 +57,15 @@ public class Parser {
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine();
 
-            //Remove whitespace
-            line = line.replaceAll("^[ \t]+", "");
-            line = line.replaceAll("[ \t]+$", "");
-
             //Remove comments if present
             int trimIndex = line.indexOf("//");
             if (trimIndex != -1) {
                 line = line.substring(0, trimIndex);
             }
+
+            //Remove whitespace
+            line = line.replaceAll("^[ \t]+", "");
+            line = line.replaceAll("[ \t]+$", "");
 
             if (!line.equals("")) {
                 lines.add(line);
@@ -87,6 +87,7 @@ public class Parser {
      */
     public void advance() {
         currentLine++;
+        System.out.println(lines.get(currentLine));
         String[] tokens = lines.get(currentLine).split(" ");
 
         //Parse arguments
