@@ -318,12 +318,6 @@ public class CodeWriter {
         writer.write("D=M\n");
         writer.write("@14\n");
         writer.write("M=D\n");
-        //Store return address at M[15] for later use
-        writer.write("@5\n");
-        writer.write("A=D-A\n");
-        writer.write("D=M\n");
-        writer.write("@15\n");
-        writer.write("M=D\n");
         //Store return value at ARG
         writer.write("@SP\n");
         writer.write("A=M-1\n");
@@ -368,8 +362,11 @@ public class CodeWriter {
         writer.write("M=D\n");
         //Fetch return address and jump to it
         writer.write("@15\n");
+        writer.write("D=M\n");
+        writer.write("@5\n");
+        writer.write("A=D-A\n");
         writer.write("A=M\n");
-        writer.write("0; JMP\n");
+        writer.write("0;JMP\n");
     }
 
     /**
