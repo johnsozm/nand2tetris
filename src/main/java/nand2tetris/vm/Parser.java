@@ -87,7 +87,6 @@ public class Parser {
      */
     public void advance() {
         currentLine++;
-        System.out.println(lines.get(currentLine));
         String[] tokens = lines.get(currentLine).split(" ");
 
         //Parse arguments
