@@ -242,7 +242,7 @@ public class JackTokenizer {
                         tokens.add(new Token(word, TokenType.IDENTIFIER));
                         break;
                 }
-                index = endIndex;
+                index = endIndex - 1;
             }
 
             index++;
