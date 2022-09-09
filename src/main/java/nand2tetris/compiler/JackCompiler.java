@@ -37,7 +37,7 @@ public class JackCompiler {
         for (File f: toParse) {
             try {
                 JackTokenizer tokenizer = new JackTokenizer(f);
-                File output = new File(f.getAbsolutePath().replace("\\.jack$", ".vm"));
+                File output = new File(f.getAbsolutePath().replaceAll("\\.jack$", ".vm"));
                 FileWriter writer = new FileWriter(output);
 
                 writer.write("<tokens>\n");
