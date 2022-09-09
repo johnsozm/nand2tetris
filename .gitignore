@@ -50,3 +50,4 @@ bin/
 /src/test/java/nand2tetris/assembler/*.hack
 /src/test/java/nand2tetris/vm/*.asm
 /src/test/java/nand2tetris/vm/*/*.asm
+/src/test/java/nand2tetris/compiler/*/*.vm
