@@ -1,11 +1,58 @@
 package nand2tetris.compiler;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 /**
  * Tokenizer class for Jack syntax analysis.
  */
 public class JackTokenizer {
+    /**List of tokens in the file*/
+    private ArrayList<Token> tokens;
+    /**Current token pointer*/
+    private int currentToken;
+
+    /**
+     * Class holding a single token and its type.
+     */
+    private class Token {
+        /**Token's string value*/
+        private String value;
+        /**Token's type*/
+        private TokenType type;
+
+        /**
+         * Construct a new token.
+         *
+         * @param _value The token's value.
+         * @param _type The token's type.
+         */
+        public Token(String _value, TokenType _type) {
+            value = _value;
+            type = _type;
+        }
+
+        /**
+         * Get the token's value.
+         *
+         * @return The value, as a string.
+         */
+        public String getValue() {
+            return value;
+        }
+
+        /**
+         * Get the token's type.
+         *
+         * @return The type, as a TokenType enum.
+         */
+        public TokenType getType() {
+            return type;
+        }
+    }
+
     /**
      * Enum containing all token types.
      */
@@ -75,8 +122,113 @@ public class JackTokenizer {
      *
      * @param _input A File object pointing to the file to be read.
      */
-    public JackTokenizer(File _input) {
+    public JackTokenizer(File _input) throws FileNotFoundException {
+        //Read in file, trimming 1-line comments and leading/trailing whitespace
+        Scanner scanner = new Scanner(_input);
+        String code = "";
+        currentToken = -1;
+        tokens = new ArrayList<>();
 
+        while (scanner.hasNextLine()) {
+            String nextLine = scanner.nextLine();
+
+            int index = nextLine.indexOf("//");
+            if (index != -1) {
+                nextLine = nextLine.substring(0, index);
+            }
+
+            code += nextLine.strip() + " ";
+        }
+
+        //Remove block comments and replace tabs with spaces
+        while (true) {
+            int beginIndex = code.indexOf("/*");
+
+            if (beginIndex == -1) {
+                break;
+            }
+            else {
+                int endIndex = code.indexOf("*/");
+                code = code.substring(0, beginIndex) + code.substring(endIndex + 2);
+            }
+        }
+        code = code.replace("\t", " ");
+
+        //Tokenize remaining file
+        int index = 0;
+        while (index < code.length()) {
+            char firstChar = code.charAt(index);
+            //Literal string token
+            if (firstChar == '"') {
+                int beginIndex = index + 1;
+                int endIndex = code.indexOf('"', beginIndex);
+                tokens.add(new Token(code.substring(beginIndex, endIndex), TokenType.STRING_CONST));
+                index = endIndex;
+            }
+            //Literal integer token
+            else if (firstChar >= '0' && firstChar <= '9') {
+                //Parse integer until we hit a non-numeric character
+                int value = firstChar - '0';
+                index++;
+                while (true) {
+                    char nextChar = code.charAt(index);
+                    if (nextChar >= '0' && nextChar <= '9') {
+                        value *= 10;
+                        value += nextChar - '0';
+                    }
+                    else {
+                        index--;
+                        break;
+                    }
+                }
+
+                //Check for overflow
+                if (value > 32767 || value < 0) {
+                    throw new IllegalArgumentException("Integer literal " + value + " is out of bounds.");
+                }
+                else {
+                    tokens.add(new Token(Integer.toString(value), TokenType.INT_CONST));
+                }
+            }
+            else if ("{}()[].,;+-*/&|<>=~".indexOf(firstChar) != -1) {
+                tokens.add(new Token(Character.toString(firstChar), TokenType.SYMBOL));
+            }
+            else {
+                int endIndex = code.indexOf(" ");
+                String word = code.substring(index, endIndex);
+                switch (word) {
+                    case "class":
+                    case "constructor":
+                    case "function":
+                    case "method":
+                    case "field":
+                    case "static":
+                    case "var":
+                    case "int":
+                    case "char":
+                    case "boolean":
+                    case "void":
+                    case "true":
+                    case "false":
+                    case "null":
+                    case "this":
+                    case "let":
+                    case "do":
+                    case "if":
+                    case "else":
+                    case "while":
+                    case "return":
+                        tokens.add(new Token(word, TokenType.KEYWORD));
+                        break;
+                    default:
+                        tokens.add(new Token(word, TokenType.IDENTIFIER));
+                        break;
+                }
+                index = endIndex;
+            }
+
+            index++;
+        }
     }
 
     /**
@@ -85,14 +237,14 @@ public class JackTokenizer {
      * @return True if there are more tokens to read, false if not.
      */
     public boolean hasMoreTokens() {
-        return false;
+        return currentToken < tokens.size();
     }
 
     /**
      * Advances to and parses the next token.
      */
     public void advance() {
-
+        currentToken++;
     }
 
     /**
@@ -101,7 +253,7 @@ public class JackTokenizer {
      * @return A TokenType enum representing the token's type.
      */
     public TokenType tokenType() {
-        return null;
+        return tokens.get(currentToken).getType();
     }
 
     /**
@@ -110,7 +262,52 @@ public class JackTokenizer {
      * @return A KeyWord enum representing the keyword.
      */
     public KeyWord keyWord() {
-        return null;
+        switch (tokens.get(currentToken).getValue()) {
+            case "class":
+                return KeyWord.CLASS;
+            case "constructor":
+                return KeyWord.CONSTRUCTOR;
+            case "function":
+                return KeyWord.FUNCTION;
+            case "method":
+                return KeyWord.METHOD;
+            case "field":
+                return KeyWord.FIELD;
+            case "static":
+                return KeyWord.STATIC;
+            case "var":
+                return KeyWord.VAR;
+            case "int":
+                return KeyWord.INT;
+            case "char":
+                return KeyWord.CHAR;
+            case "boolean":
+                return KeyWord.BOOLEAN;
+            case "void":
+                return KeyWord.VOID;
+            case "true":
+                return KeyWord.TRUE;
+            case "false":
+                return KeyWord.FALSE;
+            case "null":
+                return KeyWord.NULL;
+            case "this":
+                return KeyWord.THIS;
+            case "let":
+                return KeyWord.LET;
+            case "do":
+                return KeyWord.DO;
+            case "if":
+                return KeyWord.IF;
+            case "else":
+                return KeyWord.ELSE;
+            case "while":
+                return KeyWord.WHILE;
+            case "return":
+                return KeyWord.RETURN;
+            default:
+                return null;
+        }
     }
 
     /**
@@ -119,7 +316,7 @@ public class JackTokenizer {
      * @return The symbol, as a character.
      */
     public char symbol() {
-        return ' ';
+        return tokens.get(currentToken).getValue().charAt(0);
     }
 
     /**
@@ -128,7 +325,7 @@ public class JackTokenizer {
      * @return The identifier, as a string.
      */
     public String identifier() {
-        return "";
+        return tokens.get(currentToken).getValue();
     }
 
     /**
@@ -137,7 +334,7 @@ public class JackTokenizer {
      * @return The literal integer.
      */
     public int intVal() {
-        return 0;
+        return Integer.parseInt(tokens.get(currentToken).getValue());
     }
 
     /**
@@ -146,6 +343,6 @@ public class JackTokenizer {
      * @return The literal, as a String.
      */
     public String stringVal() {
-        return "";
+        return tokens.get(currentToken).getValue();
     }
 }
