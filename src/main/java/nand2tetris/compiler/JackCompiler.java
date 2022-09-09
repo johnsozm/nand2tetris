@@ -49,7 +49,21 @@ public class JackCompiler {
                             writer.write("<keyword> " + tokenizer.keyWord().toString().toLowerCase() + " </keyword>\n");
                             break;
                         case SYMBOL:
-                            writer.write("<symbol> " + tokenizer.symbol() + " </symbol>\n");
+                            char s = tokenizer.symbol();
+                            switch (s) {
+                                case '<':
+                                    writer.write("<symbol> &lt; </symbol>\n");
+                                    break;
+                                case '>':
+                                    writer.write("<symbol> &gt; </symbol>\n");
+                                    break;
+                                case '&':
+                                    writer.write("<symbol> &amp; </symbol>\n");
+                                    break;
+                                default:
+                                    writer.write("<symbol> " + tokenizer.symbol() + " </symbol>\n");
+                                    break;
+                            }
                             break;
                         case IDENTIFIER:
                             writer.write("<identifier> " + tokenizer.identifier() + " </identifier>\n");
@@ -63,7 +77,7 @@ public class JackCompiler {
                     }
                 }
 
-                writer.write("</tokens>");
+                writer.write("</tokens>\n");
                 writer.close();
             }
             catch (IOException e) {
