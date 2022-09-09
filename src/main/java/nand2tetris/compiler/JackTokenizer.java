@@ -140,6 +140,8 @@ public class JackTokenizer {
             code += nextLine.strip() + " ";
         }
 
+        scanner.close();
+
         //Remove block comments and replace tabs with spaces
         while (true) {
             int beginIndex = code.indexOf("/*");
@@ -153,6 +155,8 @@ public class JackTokenizer {
             }
         }
         code = code.replace("\t", " ");
+
+        System.out.println(code);
 
         //Tokenize remaining file
         int index = 0;
@@ -194,7 +198,19 @@ public class JackTokenizer {
                 tokens.add(new Token(Character.toString(firstChar), TokenType.SYMBOL));
             }
             else {
-                int endIndex = code.indexOf(" ");
+                int spaceIndex = code.indexOf(" ", index);
+                int parenIndex = code.indexOf("(", index);
+                int squareIndex = code.indexOf("[", index);
+                int endIndex = code.length();
+                if (spaceIndex != -1 && spaceIndex < endIndex) {
+                    endIndex = spaceIndex;
+                }
+                if (parenIndex != -1 && parenIndex < endIndex) {
+                    endIndex = parenIndex;
+                }
+                if (squareIndex != -1 && squareIndex < endIndex) {
+                    endIndex = squareIndex;
+                }
                 String word = code.substring(index, endIndex);
                 switch (word) {
                     case "class":
@@ -237,7 +253,7 @@ public class JackTokenizer {
      * @return True if there are more tokens to read, false if not.
      */
     public boolean hasMoreTokens() {
-        return currentToken < tokens.size();
+        return currentToken < tokens.size() - 1;
     }
 
     /**
