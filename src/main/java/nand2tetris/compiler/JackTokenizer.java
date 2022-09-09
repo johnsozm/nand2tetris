@@ -172,11 +172,12 @@ public class JackTokenizer {
                 //Parse integer until we hit a non-numeric character
                 int value = firstChar - '0';
                 index++;
-                while (true) {
+                while (index < code.length()) {
                     char nextChar = code.charAt(index);
                     if (nextChar >= '0' && nextChar <= '9') {
                         value *= 10;
                         value += nextChar - '0';
+                        index++;
                     }
                     else {
                         index--;
@@ -201,7 +202,7 @@ public class JackTokenizer {
             }
             else {
                 int endIndex = index + 1;
-                while (!"{}()[].,;+-*/&|<>=~ ".contains(Character.toString(code.charAt(endIndex))) && endIndex < code.length()) {
+                while (endIndex < code.length() && "{}()[].,;+-*/&|<>=~ ".indexOf(code.charAt(endIndex)) == -1) {
                     endIndex++;
                 }
                 String word = code.substring(index, endIndex);
