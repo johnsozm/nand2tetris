@@ -156,8 +156,6 @@ public class JackTokenizer {
         }
         code = code.replace("\t", " ");
 
-        System.out.println(code);
-
         //Tokenize remaining file
         int index = 0;
         while (index < code.length()) {
@@ -196,6 +194,10 @@ public class JackTokenizer {
             }
             else if ("{}()[].,;+-*/&|<>=~".indexOf(firstChar) != -1) {
                 tokens.add(new Token(Character.toString(firstChar), TokenType.SYMBOL));
+            }
+            else if (firstChar == ' ') {
+                index++;
+                continue;
             }
             else {
                 int spaceIndex = code.indexOf(" ", index);
