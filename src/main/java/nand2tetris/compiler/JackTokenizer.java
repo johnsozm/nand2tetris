@@ -200,18 +200,9 @@ public class JackTokenizer {
                 continue;
             }
             else {
-                int spaceIndex = code.indexOf(" ", index);
-                int parenIndex = code.indexOf("(", index);
-                int squareIndex = code.indexOf("[", index);
-                int endIndex = code.length();
-                if (spaceIndex != -1 && spaceIndex < endIndex) {
-                    endIndex = spaceIndex;
-                }
-                if (parenIndex != -1 && parenIndex < endIndex) {
-                    endIndex = parenIndex;
-                }
-                if (squareIndex != -1 && squareIndex < endIndex) {
-                    endIndex = squareIndex;
+                int endIndex = index + 1;
+                while (!"{}()[].,;+-*/&|<>=~ ".contains(Character.toString(code.charAt(endIndex))) && endIndex < code.length()) {
+                    endIndex++;
                 }
                 String word = code.substring(index, endIndex);
                 switch (word) {
