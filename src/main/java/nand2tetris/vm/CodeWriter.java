@@ -206,9 +206,8 @@ public class CodeWriter {
         writer.write("D=A\n");
         writer.write("@SP\n");
         writer.write("M=D\n");
-        //Write jump to init method (no stack frame needed for initial call)
-        writer.write("@Sys.init\n");
-        writer.write("0;JMP\n");
+        //Write call Sys.init 0
+        writeCall("Sys.init", 0);
     }
 
     /**
