@@ -1,7 +1,6 @@
 package nand2tetris.compiler;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.FilenameFilter;
 import java.io.IOException;
 
@@ -38,47 +37,8 @@ public class JackCompiler {
             try {
                 JackTokenizer tokenizer = new JackTokenizer(f);
                 File output = new File(f.getAbsolutePath().replaceAll("\\.jack$", ".vm"));
-                FileWriter writer = new FileWriter(output);
-
-                writer.write("<tokens>\n");
-
-                while (tokenizer.hasMoreTokens()) {
-                    tokenizer.advance();
-                    switch (tokenizer.tokenType()) {
-                        case KEYWORD:
-                            writer.write("<keyword> " + tokenizer.keyWord().toString().toLowerCase() + " </keyword>\n");
-                            break;
-                        case SYMBOL:
-                            char s = tokenizer.symbol();
-                            switch (s) {
-                                case '<':
-                                    writer.write("<symbol> &lt; </symbol>\n");
-                                    break;
-                                case '>':
-                                    writer.write("<symbol> &gt; </symbol>\n");
-                                    break;
-                                case '&':
-                                    writer.write("<symbol> &amp; </symbol>\n");
-                                    break;
-                                default:
-                                    writer.write("<symbol> " + tokenizer.symbol() + " </symbol>\n");
-                                    break;
-                            }
-                            break;
-                        case IDENTIFIER:
-                            writer.write("<identifier> " + tokenizer.identifier() + " </identifier>\n");
-                            break;
-                        case INT_CONST:
-                            writer.write("<integerConstant> " + tokenizer.intVal() + " </integerConstant>\n");
-                            break;
-                        case STRING_CONST:
-                            writer.write("<stringConstant> " + tokenizer.stringVal() + " </stringConstant>\n");
-                            break;
-                    }
-                }
-
-                writer.write("</tokens>\n");
-                writer.close();
+                CompilationEngine engine = new CompilationEngine(tokenizer, output);
+                engine.compileClass();
             }
             catch (IOException e) {
                 System.err.println("Error while writing output file.");
