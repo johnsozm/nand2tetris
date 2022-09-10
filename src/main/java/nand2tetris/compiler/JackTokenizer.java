@@ -122,7 +122,7 @@ public class JackTokenizer {
      *
      * @param _input A File object pointing to the file to be read.
      */
-    public JackTokenizer(File _input) throws FileNotFoundException {
+    public JackTokenizer(File _input) throws FileNotFoundException, SyntaxException {
         //Read in file, trimming 1-line comments and leading/trailing whitespace
         Scanner scanner = new Scanner(_input);
         String code = "";
@@ -187,7 +187,7 @@ public class JackTokenizer {
 
                 //Check for overflow
                 if (value > 32767 || value < 0) {
-                    throw new IllegalArgumentException("Integer literal " + value + " is out of bounds.");
+                    throw new SyntaxException("Integer literal " + value + " is out of bounds.");
                 }
                 else {
                     tokens.add(new Token(Integer.toString(value), TokenType.INT_CONST));

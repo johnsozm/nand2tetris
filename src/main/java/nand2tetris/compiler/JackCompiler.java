@@ -1,5 +1,7 @@
 package nand2tetris.compiler;
 
+import org.joni.Syntax;
+
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
@@ -42,6 +44,11 @@ public class JackCompiler {
             }
             catch (IOException e) {
                 System.err.println("Error while writing output file.");
+                System.err.println(e.getMessage());
+                System.exit(1);
+            }
+            catch (SyntaxException e) {
+                System.err.println("Syntax error:");
                 System.err.println(e.getMessage());
                 System.exit(1);
             }
