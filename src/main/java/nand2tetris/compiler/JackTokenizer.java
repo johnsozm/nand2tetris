@@ -355,4 +355,18 @@ public class JackTokenizer {
     public String stringVal() {
         return tokens.get(currentToken).getValue();
     }
+
+    /**
+     * Generic toString method - returns current token as a string.
+     *
+     * @return A String containing the current token.
+     */
+    public String toString() {
+        if (currentToken == -1) {
+            return "Not initialized";
+        }
+        else {
+            return tokens.get(currentToken).getValue();
+        }
+    }
 }
